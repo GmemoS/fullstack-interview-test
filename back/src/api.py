@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
 
 from config import CustomConfig
@@ -9,6 +10,7 @@ app = Flask(__name__)
 app.config.from_object(CustomConfig)
 CustomConfig.init_app(app)
 api = Api(app)
+CORS(app)
 
 api.add_resource(Branches, '/api/v1/branches', '/api/v1/branches/')
 

@@ -24,7 +24,7 @@ class Repository:
         """Return branch info in the format below
         {
             'name': str,
-            'last-commit': str,
+            'commit': str,
             'datetime': datetime,
         }
 
@@ -44,7 +44,7 @@ class Repository:
 
         return {
             'name': branch.name,
-            'last-commit': branch.commit.hexsha,
+            'commit': branch.commit.hexsha,
             'datetime': branch.commit.committed_datetime,
         }
 
@@ -52,7 +52,7 @@ class Repository:
         """List all branches in the format below
         {
             'name': str,
-            'last-commit': str,
+            'commit': str,
             'datetime': datetime,
         }
 
@@ -62,7 +62,7 @@ class Repository:
         for branch in self._repo.heads:
             yield {
                 'name': branch.name,
-                'last-commit': branch.commit.hexsha,
+                'commit': branch.commit.hexsha,
                 'datetime': branch.commit.committed_datetime,
             }
 
