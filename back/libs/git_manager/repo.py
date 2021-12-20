@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from typing import Dict, Iterable, Union
+from typing import Dict, Iterable, Optional, Union
 
 from git import Repo
 from gitdb.exc import BadName
@@ -66,48 +66,6 @@ class Repository:
                 'datetime': branch.commit.committed_datetime,
             }
 
-    def get_branch_commits(
-        self, name: str
-    ) -> Iterable[Dict[str, Union[str, datetime, FileType]]]:
-        """List all commits for the given branch in the format below
-        {
-            'hexsha': str,
-            'message': str,
-            'author': str,
-            'email': str,
-            'files': {
-                str<file name>: {
-                    'insertions': int,
-                    'deletions': int,
-                    'lines': int,
-                },
-                ...
-            },
-            'datetime': datetime,
-        }
-
-        Args:
-            name (str): Branch name
-
-        Yields:
-            Available commits
-        """
-        # Validate branch existence
-        branch = self.get_branch(name)
-
-        # Get branch commits
-        commits = self._repo.iter_commits(branch['name'])
-
-        for commit in commits:
-            yield {
-                'hexsha': commit.hexsha,
-                'message': commit.message,
-                'author': commit.author.name,
-                'email': commit.author.email,
-                'files': commit.stats.files,
-                'datetime': commit.committed_datetime,
-            }
-
     def get_commit(
         self, hexsha: str
     ) -> Dict[str, Union[str, datetime, FileType]]:
@@ -135,3 +93,45 @@ class Repository:
             'files': commit.stats.files,
             'datetime': commit.committed_datetime,
         }
+
+    def get_commits(
+        self, branch_name: Optional[str] = None
+    ) -> Iterable[Dict[str, Union[str, datetime, FileType]]]:
+        """List all commits for the given branch in the format below
+        {
+            'hexsha': str,
+            'message': str,
+            'author': str,
+            'email': str,
+            'files': {
+                str<file name>: {
+                    'insertions': int,
+                    'deletions': int,
+                    'lines': int,
+                },
+                ...
+            },
+            'datetime': datetime,
+        }
+
+        Args:
+            branch_name (str, optional): Branch name to be used for
+                filtering commits. Defaults to None.
+
+        Yields:
+            Available commits
+        """
+        try:
+            for commit in self._repo.iter_commits(branch_name):
+                yield {
+                    'hexsha': commit.hexsha,
+                    'message': commit.message,
+                    'author': commit.author.name,
+                    'email': commit.author.email,
+                    'files': commit.stats.files,
+                    'datetime': commit.committed_datetime,
+                }
+        except Exception as ex:
+            raise NoBranch(
+                f'Branch {branch_name} not found', branch=branch_name
+            )
