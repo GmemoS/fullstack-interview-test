@@ -8,6 +8,7 @@ git-manager = {path = "."}
 gitpython = "*"
 flask = "*"
 flask-restful = "*"
+flask-cors = "*"
 
 [dev-packages]
 ipython = "*"
