@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.9
 
 LABEL version="1.0"
 LABEL org.opencontainers.image.authors="Carlos Guillermo Jimenez Salcedo"
