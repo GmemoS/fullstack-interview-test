@@ -8,6 +8,6 @@ WORKDIR /usr/src/git_manager/back
 RUN pip install pipenv
 RUN pipenv install --system
 
-RUN git clone https://github.com/GmemoS/fullstack-interview-test.git /usr/src/git_manager/repo
+RUN git clone --bare https://github.com/GmemoS/fullstack-interview-test.git /usr/src/git_manager/repo
 
 CMD ["python", "/usr/src/git_manager/back/src/api.py"]
