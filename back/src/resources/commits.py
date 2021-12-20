@@ -25,7 +25,9 @@ class Commits(Resource):
 
         if commit_hexsha:
             try:
-                return self._repo_manager.get_commit(commit_hexsha)
+                commit = self._repo_manager.get_commit(commit_hexsha)
+                commit['count_files'] = len(commit['files'])
+                return commit
             except NoCommit as ex:
                 return {'error': str(ex)}, 404
         else:
