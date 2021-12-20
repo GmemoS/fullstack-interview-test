@@ -12,3 +12,14 @@ services:
       - GIT_REPO_PATH=/usr/src/git_manager/repo/
     ports:
       - "5000:5000"
+  front:
+    build:
+      context: ./
+      dockerfile: ./docker/front/Dockerfile
+    container_name: git_manager_front
+    volumes:
+      - ./front:/usr/src/git_manager_front
+    ports:
+      - "8080:3000"
+    depends_on:
+      - back
