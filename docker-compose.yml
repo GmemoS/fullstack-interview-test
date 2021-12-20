@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  back:
+    build:
+      context: ./
+      dockerfile: ./docker/back/Dockerfile
+    container_name: git_manager_back
+    volumes:
+      - ./back:/usr/src/git_manager/back
+    environment:
+      - GIT_REPO_PATH=/usr/src/git_manager/repo/
+    ports:
+      - "5000:5000"
